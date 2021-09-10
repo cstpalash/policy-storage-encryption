@@ -8,7 +8,7 @@ exports.handler = async function(event, context) {
   console.log('## EVENT: ' + serialize(event))
   
   
-  return { hello : "world" };
+  return { hello : "nidhi" };
 }
 
 var serialize = function(object) {

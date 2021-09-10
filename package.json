@@ -1,0 +1,13 @@
+{
+  "name": "cloud-public-aws-service-s3-encryption",
+  "version": "1.0.0",
+  "description": "Policy for AWS S3 encryption",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}

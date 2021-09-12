@@ -1,13 +1,16 @@
 {
-  "name": "cloud-public-aws-service-s3-encryption",
+  "name": "policy-storage-encryption",
   "version": "1.0.0",
-  "description": "Policy for AWS S3 encryption",
-  "main": "index.js",
+  "description": "Policy for storage encryption",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "cucumber-js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "@cucumber/cucumber": "^7.3.1"
+  }
 }

@@ -1,0 +1,19 @@
+{
+  "$metadata": {
+    "httpStatusCode": 200,
+    "extendedRequestId": "xxxxx",
+    "attempts": 1,
+    "totalRetryDelay": 0
+  },
+  "ServerSideEncryptionConfiguration": {
+    "Rules": [
+      {
+        "ApplyServerSideEncryptionByDefault": {
+          "SSEAlgorithm": "aws:kms",
+          "KMSMasterKeyID": "arn:aws:kms:zz-xxxx-n:1234567890:key/xxyyzzzz"
+        },
+        "BucketKeyEnabled": true
+      }
+    ]
+  }
+}

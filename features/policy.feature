@@ -9,9 +9,9 @@ Feature: Is storage encrypted by managed cryptographic key?
 		Then BucketKeyEnabled should be "true" and SSEAlgorithm should be "aws:kms"
 
 	Examples:
-    | environment	|
-    | dev 			|		
-    | uat 			|
-    | prod 			|
+	| environment	|
+	| dev			|
+	| uat			|
+	| prod			|
 
     ################################# AWS S3 RUNNING - end #################################

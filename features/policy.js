@@ -9,19 +9,14 @@ const implementation = require('../app.js');
 
 Given('encryption configuration of AWS S3 bucket in {string}', function (environment) {
 
-	this.policyMetadata = require('./mock/aws.s3.encryption.json');
+	this.event = require('./mock/aws.s3.encryption.json');
 
 });
 
 When('checked for BucketKeyEnabled and SSEAlgorithm', function () {
 
-	var event = {
-		key: 'aws-s3',
-		metadata: this.policyMetadata
-	};
-
-	this.actualEncryption = implementation.checkForEncryption(event);
-	this.actualEncryptionAlgorithm = implementation.checkForEncryptionAlgorithm(event);
+	this.actualEncryption = implementation.checkForEncryption(this.event);
+	this.actualEncryptionAlgorithm = implementation.checkForEncryptionAlgorithm(this.event);
 
 });
 

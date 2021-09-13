@@ -18,8 +18,8 @@ exports.handler = async function(event, context) {
 
 exports.checkForEncryption = function(event){
 
-  switch(event.key){
-    case 'aws-s3':
+  switch(event.action){
+    case 'validate-aws-s3-encryption-configuration':
       return checkForEncryption_AWS_S3(event);
       break;
     default:
@@ -31,8 +31,8 @@ exports.checkForEncryption = function(event){
 
 exports.checkForEncryptionAlgorithm = function(event){
 
-  switch(event.key){
-    case 'aws-s3':
+  switch(event.action){
+    case 'validate-aws-s3-encryption-configuration':
       return checkForEncryptionAlgorithm_AWS_S3(event);
       break;
     default:
@@ -45,8 +45,8 @@ exports.checkForEncryptionAlgorithm = function(event){
 }
 
 function getExpectedEncryptionAlgorithm(event){
-  switch(event.key){
-    case 'aws-s3':
+  switch(event.action){
+    case 'validate-aws-s3-encryption-configuration':
       return 'aws:kms';
       break;
     default:

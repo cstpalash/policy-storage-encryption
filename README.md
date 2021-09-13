@@ -11,9 +11,9 @@ Policy is an **executable** specification with **explicit definition** and **mul
 - Should have high observability throughout lifecycle
 
 ## A ready example : policy-storage-encryption
-[**Policy definition** (features/policy.feature)](features/policy.feature) : This is a BDD (cucumber) feature - each scenario is an implementation
-[**Policy test** (features/policy.js)](features/policy.js) : This is a BDD (cucumber) step-definition
-[**Policy implementations** (app.js)](app.js) : This is a function (FAAS) to serve multiple implementations - developed, built, tested and deployed independently. Can be invoked on-demand and scale (to zero as well).
+- [**Policy definition** (features/policy.feature)](features/policy.feature) : This is a BDD (cucumber) feature and each scenario is an implementation
+- [**Policy test** (features/policy.js)](features/policy.js) : This is a BDD (cucumber) step-definition
+- [**Policy implementations** (app.js)](app.js) : This is a function (FAAS) to serve multiple implementations - developed, built, tested and deployed independently. Can be invoked on-demand and scale (to zero as well).
 
 ## How to run locally
 ```

@@ -11,7 +11,7 @@ exports.handler = async function(event, context) {
   var expectedAlgo = getExpectedEncryptionAlgorithm(event);
 
   if(exports.checkForEncryptionAlgorithm(event) != expectedAlgo)
-    return { valid : false, message : `not encrypted with expected algorithm : ${expectedAlgo}` };
+    return { valid : false, message : `storage is not encrypted with expected algorithm [${expectedAlgo}]` };
 
   return { valid : true, message : '' };
 }

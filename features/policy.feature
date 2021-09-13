@@ -1,10 +1,5 @@
-Feature: Is storage encrypted by self managed cryptographic key?
-	Storage should be encrypted by self managed cryptographic key
-
-
-	################################# AWS S3 PROVISIONING - start #################################
-
-	################################# AWS S3 PROVISIONING - end #################################
+Feature: Is storage encrypted by managed cryptographic key?
+	Storage should be encrypted by managed cryptographic key
 
 	################################# AWS S3 RUNNING - start #################################
 

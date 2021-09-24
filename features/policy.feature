@@ -10,7 +10,7 @@ Feature: xxxxCS-154-056 (MOD.EKM.C)
 	# Implementation : aws.s3 - Continuous Compliance 
 
 	Scenario Outline: ["<environment>"] While an AWS S3 bucket is up and running, it should be encrypted by AWS KMS managed key 
-		Given I receive CreateBucket, PutBucketEncryption and DeleteBucketEncryption events and fetch encryption configuration of that aws.s3 bucket in "<environment>"  
+		Given I receive CreateBucket, PutBucketEncryption or DeleteBucketEncryption events for an aws.s3 bucket and then fetch encryption configuration of that bucket in "<environment>"  
 		When I check for BucketKeyEnabled and SSEAlgorithm
 		Then BucketKeyEnabled should be "true" and SSEAlgorithm should be "aws:kms"
 

@@ -5,7 +5,7 @@ const implementation = require('../app.js');
 
 // Implementation : aws.s3 - Continuous Compliance
 
-Given('I receive CreateBucket, PutBucketEncryption and DeleteBucketEncryption events and fetch encryption configuration of that aws.s3 bucket in {string}', function (environment) {
+Given('I receive CreateBucket, PutBucketEncryption or DeleteBucketEncryption events for an aws.s3 bucket and then fetch encryption configuration of that bucket in {string}', function (string) {
 	this.event = require('./mock/aws.s3.encryption.json');
 });
 

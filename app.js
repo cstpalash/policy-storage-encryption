@@ -6,14 +6,14 @@ exports.handler = async function(event, context) {
   
 
   if(exports.checkForEncryption(event) === false)
-    return { valid : false, message : 'storage is not encrypted' };
+    return { policyId : "xxxxCS-154-056", valid : false, message : 'storage is not encrypted' };
 
   var expectedAlgo = getExpectedEncryptionAlgorithm(event);
 
   if(exports.checkForEncryptionAlgorithm(event) != expectedAlgo)
-    return { valid : false, message : `storage is not encrypted with expected algorithm [${expectedAlgo}]` };
+    return { policyId : "xxxxCS-154-056", valid : false, message : `storage is not encrypted with expected algorithm [${expectedAlgo}]` };
 
-  return { valid : true, message : '' };
+  return { policyId : "xxxxCS-154-056", valid : true, message : '' };
 }
 
 exports.checkForEncryption = function(event){

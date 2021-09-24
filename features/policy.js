@@ -3,17 +3,13 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 
 const implementation = require('../app.js');
 
+// Implementation : aws.s3 - Continuous Compliance
 
-
-// ################################# AWS S3 RUNNING - start #################################
-
-Given('encryption configuration of AWS S3 bucket in {string}', function (environment) {
-
+Given('I receive CreateBucket, PutBucketEncryption and DeleteBucketEncryption events and fetch encryption configuration of that aws.s3 bucket in {string}', function (environment) {
 	this.event = require('./mock/aws.s3.encryption.json');
-
 });
 
-When('checked for BucketKeyEnabled and SSEAlgorithm', function () {
+When('I check for BucketKeyEnabled and SSEAlgorithm', function () {
 
 	this.actualEncryption = implementation.checkForEncryption(this.event);
 	this.actualEncryptionAlgorithm = implementation.checkForEncryptionAlgorithm(this.event);
@@ -26,5 +22,3 @@ Then('BucketKeyEnabled should be {string} and SSEAlgorithm should be {string}', 
 	assert.strictEqual(this.actualEncryptionAlgorithm, expectedSSEAlgorithm);
 
 });
-
-// ################################# AWS S3 RUNNING - end #################################

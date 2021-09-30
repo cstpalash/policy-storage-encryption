@@ -3,17 +3,62 @@ exports.handler = async function(event, context) {
   console.log('## ENVIRONMENT VARIABLES: ' + serialize(process.env));
   console.log('## CONTEXT: ' + serialize(context));
   console.log('## EVENT: ' + serialize(event));
+
+  switch(event.action){
+    case 'validate-aws-s3-encryption-configuration':
+    {
+      if(exports.checkForEncryption(event) === false)
+        return { policyId : "xxxxCS-154-056", valid : false, message : 'storage is not encrypted' };
+
+      var expectedAlgo = getExpectedEncryptionAlgorithm(event);
+
+      if(exports.checkForEncryptionAlgorithm(event) != expectedAlgo)
+        return { policyId : "xxxxCS-154-056", valid : false, message : `storage is not encrypted with expected algorithm [${expectedAlgo}]` };
+
+      return { policyId : "xxxxCS-154-056", valid : true, message : '' };
+      break;
+    }
+    case 'get-chaos-engineering-step':
+      return exports.getChaosEngineeringSteps(event);
+      break;
+    default:
+      break;
+  }
   
+}
 
-  if(exports.checkForEncryption(event) === false)
-    return { policyId : "xxxxCS-154-056", valid : false, message : 'storage is not encrypted' };
-
-  var expectedAlgo = getExpectedEncryptionAlgorithm(event);
-
-  if(exports.checkForEncryptionAlgorithm(event) != expectedAlgo)
-    return { policyId : "xxxxCS-154-056", valid : false, message : `storage is not encrypted with expected algorithm [${expectedAlgo}]` };
-
-  return { policyId : "xxxxCS-154-056", valid : true, message : '' };
+exports.getChaosEngineeringSteps = function(event){
+  switch(event.previousStatus){
+    case "None":
+    case "Completed":
+      return [ 
+        { step : "createNonCompliantResource" }, 
+        { step : "addStatus", params : { status : "Initiated" } } 
+      ];
+      break;
+    case "Initiated":
+      return [ 
+        { 
+          step : "CheckComplianceStatusOfCreatedResource", 
+          responses : [
+            { 
+              valid : false, 
+              nextSteps : [ 
+                { step : "addStatus", params : { status : "Completed" } },
+                { step : "cleanUp" }
+              ]
+            },
+            { 
+              valid : true, 
+              nextSteps : [ 
+                { step : "addStatus", params : { status : "Initiated" } },
+              ]
+            }
+          ]
+        } 
+      ];
+      break;
+  }
 }
 
 exports.checkForEncryption = function(event){

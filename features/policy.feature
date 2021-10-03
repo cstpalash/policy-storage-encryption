@@ -6,6 +6,19 @@ Feature: xxxxCS-154-056 (MOD.EKM.C)
 
 # Mechanism : Data which is rated confidential and above must employ encryption at-rest utilizing a KMS with xxxx BYOK.
 
+	# Implementation : aws.s3 - Pre provisioning
+
+	Scenario Outline: ["<environment>"] While an AWS S3 bucket is provisioning, it should be encrypted by AWS KMS managed key 
+		Given I receive terraform plan for all AWS S3 buckets being provisioned in "<environment>"  
+		When I check for apply_server_side_encryption_by_default rule from server_side_encryption_configuration
+		Then sse_algorithm should be "aws:kms"
+
+	Examples:
+	| environment	|
+	| dev			|
+	| uat			|
+	| prod			|
+
 
 	# Implementation : aws.s3 - Continuous Compliance 
 

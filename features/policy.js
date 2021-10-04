@@ -1,7 +1,25 @@
 const assert = require('assert');
+
+
 const { Given, When, Then } = require('@cucumber/cucumber');
 
 const implementation = require('../app.js');
+
+// Implementation : aws:s3 - Pre Provisioning
+
+Given('I receive terraform plan from sentinel for all AWS S3 buckets being provisioned in {string}', function (string) {
+	this.event = require('./mock/aws.s3.preprovision.json');
+});
+
+When('I check for apply_server_side_encryption_by_default rule from server_side_encryption_configuration', function () {
+	this.S3BucketConfigurations = implementation.getAllBucketConfigFromPlan(this.event);
+});
+
+Then('sse_algorithm should be {string}', function (expectedAlgorithm) {
+	this.S3BucketConfigurations.forEach(bucketConfig => {
+		assert.strictEqual(expectedAlgorithm, implementation.getSSEAlgo(bucketConfig));
+	});
+});
 
 // Implementation : aws.s3 - Continuous Compliance
 

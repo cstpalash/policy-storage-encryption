@@ -9,7 +9,7 @@ Feature: xxxxCS-154-056 (MOD.EKM.C)
 	# Implementation : aws.s3 - Pre provisioning
 
 	Scenario Outline: ["<environment>"] While an AWS S3 bucket is provisioning, it should be encrypted by AWS KMS managed key 
-		Given I receive terraform plan for all AWS S3 buckets being provisioned in "<environment>"  
+		Given I receive terraform plan from sentinel for all AWS S3 buckets being provisioned in "<environment>"  
 		When I check for apply_server_side_encryption_by_default rule from server_side_encryption_configuration
 		Then sse_algorithm should be "aws:kms"
 

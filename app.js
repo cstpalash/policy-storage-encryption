@@ -1,3 +1,5 @@
+const jp = require('jsonpath');
+
 exports.handler = async function(event, context) {
   
   console.log('## ENVIRONMENT VARIABLES: ' + serialize(process.env));
@@ -20,6 +22,33 @@ exports.handler = async function(event, context) {
     }
     case 'get-chaos-engineering-step':
       return exports.getChaosEngineeringSteps(event);
+      break;
+
+    case 'validate-aws-s3-encryption-configuration-pre-provision':
+      {
+        let configurations = exports.getAllBucketConfigFromPlan(event);
+
+        if(configurations.length == 0)
+          return  { policyId : "xxxxCS-154-056", valid : true, message : '' }; //no related config found
+
+        var nonEncryptedBuckets = [];
+        let expectedAlgo = getExpectedEncryptionAlgorithm(event);
+
+        configurations.forEach(config => {
+          
+          let algo = exports.getSSEAlgo(config);
+          
+
+          if(algo != expectedAlgo)
+            nonEncryptedBuckets.push(config.bucket);
+
+        });
+
+        if(nonEncryptedBuckets.length > 0)
+          return { policyId : "xxxxCS-154-056", valid : false, message : `storage is not encrypted with expected algorithm [${expectedAlgo}] : ${nonEncryptedBuckets.toString()}` };
+      
+        return { policyId : "xxxxCS-154-056", valid : true, message : '' };
+      }
       break;
     default:
       break;
@@ -61,6 +90,19 @@ exports.getChaosEngineeringSteps = function(event){
   }
 }
 
+exports.getAllBucketConfigFromPlan = function(event){
+
+  switch(event.action){
+    case 'validate-aws-s3-encryption-configuration-pre-provision':
+      return getAllBucketConfigFromPlan_AWS_S3(event);
+      break;
+    default:
+      return false;
+      break;
+  }
+
+}
+
 exports.checkForEncryption = function(event){
 
   switch(event.action){
@@ -92,6 +134,7 @@ exports.checkForEncryptionAlgorithm = function(event){
 function getExpectedEncryptionAlgorithm(event){
   switch(event.action){
     case 'validate-aws-s3-encryption-configuration':
+    case 'validate-aws-s3-encryption-configuration-pre-provision':
       return 'aws:kms';
       break;
     default:
@@ -100,7 +143,27 @@ function getExpectedEncryptionAlgorithm(event){
   }
 }
 
-// ################################# AWS S3 RUNNING - start #################################
+// ################################# AWS S3 pre provision - start #################################
+
+function getAllBucketConfigFromPlan_AWS_S3(event){
+  return jp.query(event, "$.metadata..after");
+}
+
+exports.getSSEAlgo = function (bucketConfig){
+  if(bucketConfig &&
+    bucketConfig.server_side_encryption_configuration &&
+    bucketConfig.server_side_encryption_configuration.length > 0 &&
+    bucketConfig.server_side_encryption_configuration[0].rule.length > 0 &&
+    bucketConfig.server_side_encryption_configuration[0].rule[0].apply_server_side_encryption_by_default.length > 0){
+      return bucketConfig.server_side_encryption_configuration[0].rule[0].apply_server_side_encryption_by_default[0].sse_algorithm;
+  }
+  else
+    return "";
+}
+
+// ################################# AWS S3 pre provision - end #################################
+
+// ################################# AWS S3 continuous compliance - start #################################
 
 function checkForEncryption_AWS_S3(event){
 
@@ -133,7 +196,7 @@ function checkForEncryptionAlgorithm_AWS_S3(event){
   
 }
 
-// ################################# AWS S3 RUNNING - end #################################
+// ################################# AWS S3 continuous compliance - end #################################
 
 var serialize = function(object) {
   return JSON.stringify(object, null, 2)
